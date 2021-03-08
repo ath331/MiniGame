@@ -1,3 +1,3 @@
 # MiniGame_Server
 
-IOCP ±¸Á¶ ÀÌ¿ë
+IOCP ì„œë²„êµ¬ì¡°
