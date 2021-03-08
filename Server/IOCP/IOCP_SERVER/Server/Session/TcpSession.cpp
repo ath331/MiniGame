@@ -2,6 +2,8 @@
 #include "Log/Log.h"
 #include <iostream>
 
+using Pck = WSABUF;
+
 using namespace std;
 TcpSession::~TcpSession()
 {
@@ -62,15 +64,7 @@ void TcpSession::OnRecvForIocp(int recvTransLen)
 		cpyRecvBuf.buf = _recvBuf.buf;
 		cpyRecvBuf.len = _recvTotalLen;
 		PacketInfo tempPacketInfo = { _sock, packetHeader->index, cpyRecvBuf.buf };
-
-		if (packetHeader->index < PacketIndex::DB_INDEX)
-		{
-			_packetQueue->push(tempPacketInfo);
-		}
-		else if (packetHeader->index > PacketIndex::DB_INDEX)
-		{
-			_packetDBQueue->push(tempPacketInfo);
-		}
+		_packetQueue->push(tempPacketInfo);
 
 		_recvLenOffSet -= _recvTotalLen;
 		memmove(_recvBuf.buf, _recvBuf.buf + _recvTotalLen, _recvLenOffSet);

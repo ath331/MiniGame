@@ -21,8 +21,6 @@ void ClientManager::PushClientInfo(SOCKET sock, TcpSession* session)
 	_clientSessionMap.insert(make_pair(sock, session));
 }
 
-
-
 void ClientManager::CloseClient(SOCKET sock)
 {
 	shutdown(sock, SD_BOTH);

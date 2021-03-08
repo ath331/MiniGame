@@ -21,8 +21,4 @@ struct ClientInfo
 	ClientInfo() {};
 	ClientInfo(SOCKET sock) : clientSock(sock) {};
 	ClientInfo(SOCKET sock, string name) : clientSock(sock), clientName(name) {};
-
-	void OutRoom();
-
-	bool IsAcceptingRoomNum(int _roomNum);
 };

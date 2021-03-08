@@ -7,14 +7,16 @@
 
 const static int MAX_BUF_SIZE = 1024;
 
+using Pck = WSABUF;
+
 using namespace concurrency;
 using namespace std;
 
 class TcpSession
 {
 public:
-	TcpSession(HANDLE cpHandle, SOCKET sock, concurrent_queue<PacketInfo>* packetQueue, concurrent_queue<PacketInfo>* packetDBQueue) :
-		_cpHandle(cpHandle), _sock(sock), _packetQueue(packetQueue), _packetDBQueue(packetDBQueue)
+	TcpSession(HANDLE cpHandle, SOCKET sock, concurrent_queue<PacketInfo>* packetQueue) :
+		_cpHandle(cpHandle), _sock(sock), _packetQueue(packetQueue)
 		, _recvOverlapped(Overlapped::IO_TYPE::RECV)
 		, _sendOverlapped(Overlapped::IO_TYPE::SEND)
 	{
@@ -33,7 +35,6 @@ public:
 private:
 	SOCKET _sock;
 	HANDLE _cpHandle;
-	concurrent_queue<PacketInfo>* _packetDBQueue;
 	concurrent_queue<PacketInfo>* _packetQueue;
 
 	Overlapped _recvOverlapped;

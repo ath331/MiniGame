@@ -1,7 +1,7 @@
 #include "Server.h"
 #include "OverlappedCustom.h"
 
-#include "Log/Log.h"
+#include "Basic.h"
 #include "ThreadManager.h"
 #include "../BaseHeader.h"
 
@@ -47,7 +47,7 @@ Server::Server()
 
 	CreateIoCompletionPort((HANDLE)_servSock, _comPort, NULL, 0);
 	_acceptor = new Acceptor(_servSock);
-	_threadManager->InitThreadManager(_sysInfo.dwNumberOfProcessors * 2, _comPort, _clientManager, _acceptor, _roomManager);
+	_threadManager->InitThreadManager(_sysInfo.dwNumberOfProcessors * 2, _comPort, _acceptor, _roomManager);
 }
 
 void Server::_InitManagers()
@@ -65,13 +65,14 @@ void Server::RunServer()
 	for (int i = 0; i < MAX_CLIENT_ACCEPT_NUM; i++)
 		_acceptor->AcceptClient();
 
+	cout << "Server Run()" << endl;
+
 	_threadManager->WaitThread();
 }
 
 void Server::_PrintServerInfo()
 {
 	_PrintInternalIP();
-	_PrintExternalIP();
 	cout << "Server PortNum : " << _portNum << endl;
 }
 
@@ -89,17 +90,9 @@ void Server::_PrintInternalIP()
 
 	std::cout << "Server Internal IP : " << ipAddr << std::endl;
 }
-
-void Server::_PrintExternalIP()
-{
-
-}
-
 Server::~Server()
 {
-	delete _clientManager;
-	delete _threadManager;
-	delete _roomManager;
-
-	delete _acceptor;
+	DeleteSafePtr(_clientManager);
+	DeleteSafePtr(_threadManager);
+	DeleteSafePtr(_acceptor);
 }

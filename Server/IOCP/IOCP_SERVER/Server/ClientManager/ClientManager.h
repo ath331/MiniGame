@@ -2,7 +2,7 @@
 #include "ClientInfo.h"
 #include "Lock.h"
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -21,7 +21,7 @@ public:
 
 private:
 	vector<ClientInfo*> _clientVec;
-	map<SOCKET, TcpSession*> _clientSessionMap;
+	unordered_map<SOCKET, TcpSession*> _clientSessionMap;
 	Lock _clientMapLock;
 
 	struct SearchClient

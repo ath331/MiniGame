@@ -8,13 +8,12 @@
 
 using namespace std;
 
-class ClientManager;
 class Acceptor;
 class RoomManager;
 class ThreadManager
 {
 public:
-	void InitThreadManager(int maxThreadNum, HANDLE comPort, ClientManager* clientManager, Acceptor* accept, RoomManager* roomManager);
+	void InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* accept, RoomManager* roomManager);
 	void MakeThread();
 	void WaitThread();
 private:
@@ -25,18 +24,12 @@ private:
 
 	void _MakeIOThreads();
 	void _MakeLogicThread();
-	void _MakeDBThread();
 
-	static unsigned int WINAPI _RunIOThreadMain(void* thisObject); //IOCP처리 멀티스레드
+	static unsigned int WINAPI _RunIOThreadMain(void* thisObject); //IO처리 멀티스레드
 	static unsigned int WINAPI _RunLogicThreadMain(void* thisObject); //Logic처리 싱글스레드
-	static unsigned int WINAPI _RunDBThreadMain(void* thisObject); //DB처리 싱글스레드
 
-	concurrency::concurrent_queue<PacketInfo> _packetDBQueue;
 	concurrency::concurrent_queue<PacketInfo> _packetQueue;
 
-	void _SendMessageToClient(SOCKET sock, const char* pckBuf);
-
-	ClientManager* _clientManager;
 	Acceptor* _acceptor;
 	RoomManager* _roomManager;
 };

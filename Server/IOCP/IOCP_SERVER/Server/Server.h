@@ -36,5 +36,4 @@ private:
 	void _PrintServerInfo();
 
 	void _PrintInternalIP();
-	void _PrintExternalIP();
 };
