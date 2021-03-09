@@ -21,5 +21,9 @@ void ClientManager::PopClient(SOCKET sock)
 
 TcpSession* ClientManager::GetSessionInClientMap(SOCKET sock)
 {
+	auto pair = _clientMap.find(sock);
+	if (pair == _clientMap.end())
+		return nullptr;
+
 	return _clientMap[sock].session;
 }
