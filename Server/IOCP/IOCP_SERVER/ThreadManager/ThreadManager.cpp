@@ -60,6 +60,14 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 		GetQueuedCompletionStatus(thisObject->_comPort, &bytesTrans, (PULONG_PTR)&sock, (LPOVERLAPPED*)&ioInfo, INFINITE);
 		sock = ioInfo->sock; //立加茄 clientSock
 
+		if (IsNullPtr(CLIENT_MANAGER))
+			CLIENT_MANAGER = new ClientManager;
+
+		TcpSession* session = nullptr;
+		session = CLIENT_MANAGER->GetSessionInClientMap(sock);
+		if (IsNullPtr(session))
+			return 0;
+
 		if (ioInfo->ioType == Overlapped::IO_TYPE::ACCEPT) //Client 立加
 		{
 			TcpSession* session = new TcpSession(thisObject->_comPort, sock, &thisObject->_packetQueue);
@@ -78,12 +86,13 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 				CLIENT_MANAGER->PopClient(sock);
 				continue;
 			}
-			CLIENT_MANAGER->GetSession(sock)->OnRecvForIocp(bytesTrans);
+
+			session->OnRecvForIocp(bytesTrans);
 		}
 
 		else if (ioInfo->ioType == Overlapped::IO_TYPE::SEND) //Client俊霸 单捞磐 Send
 		{
-			CLIENT_MANAGER->GetSession(sock)->OnSendForIocp();
+			session->OnSendForIocp();
 		}
 
 	}
@@ -97,20 +106,24 @@ unsigned int WINAPI ThreadManager::_RunLogicThreadMain(void* _thisObject)
 
 	ThreadManager* thisObject = static_cast<ThreadManager*>(_thisObject);
 	PacketInfo packetInfo;
-	TcpSession* clientSession = nullptr;
+	TcpSession* session = nullptr;
+
 	while (true)
 	{
 		Sleep(1);
 		if (thisObject->_packetQueue.try_pop(packetInfo))
 		{
-			clientSession = CLIENT_MANAGER->GetSession(packetInfo.sock);
+			session = CLIENT_MANAGER->GetSessionInClientMap(packetInfo.sock);
+			if (IsNullPtr(session))
+				return;
+
 			switch (packetInfo.packetIndex)
 			{
 			case PacketIndex::ECHO:
 			{
 				PacketEcho packetEcho;
 				memcpy(&packetEcho, packetInfo.packetBuffer, sizeof(PacketEcho));
-				clientSession->PushSendVec(packetInfo, sizeof(PacketEcho));
+				session->PushSendVec(packetInfo, sizeof(PacketEcho));
 			}
 			break;
 

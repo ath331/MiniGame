@@ -19,6 +19,6 @@ public:
 	TcpSession* GetSession(SOCKET sock);
 
 private:
-	unordered_map<SOCKET, TcpSession*> _clientMap;
+	unordered_map<SOCKET, ClientState> _clientMap;
 };
 

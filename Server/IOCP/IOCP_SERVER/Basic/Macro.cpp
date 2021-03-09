@@ -8,7 +8,7 @@ bool IsNullPtr(void* ptr)
 		return false;
 }
 
-void DeleteSafePtr(void* ptr)
+void SafeDeletePtr(void* ptr)
 {
 	if (!IsNullPtr(ptr))
 		delete ptr;
