@@ -16,7 +16,7 @@ class ClientManager
 public:
 	void PushClient(SOCKET sock, TcpSession* session);
 	void PopClient(SOCKET sock);
-	TcpSession* GetSession(SOCKET sock);
+	TcpSession* GetSessionInClientMap(SOCKET sock);
 
 private:
 	unordered_map<SOCKET, ClientState> _clientMap;

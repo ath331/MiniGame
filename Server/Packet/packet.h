@@ -28,7 +28,7 @@ struct PacketEcho : public PacketHeader
 {
 	const char msg[20] = "";
 	int uniqueNum = 0;
-
+	 
 	PacketEcho()
 	{
 		index = PacketIndex::ECHO;

@@ -99,7 +99,7 @@ void Server::_PrintInternalIP()
 }
 Server::~Server()
 {
-	DeleteSafePtr(_clientManager);
-	DeleteSafePtr(_threadManager);
-	DeleteSafePtr(_acceptor);
+	SafeDeletePtr(_clientManager);
+	SafeDeletePtr(_threadManager);
+	SafeDeletePtr(_acceptor);
 }

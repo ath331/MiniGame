@@ -70,7 +70,7 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 
 		if (ioInfo->ioType == Overlapped::IO_TYPE::ACCEPT) //Client Á¢¼Ó
 		{
-			TcpSession* session = new TcpSession(thisObject->_comPort, sock, &thisObject->_packetQueue);
+			session = new TcpSession(thisObject->_comPort, sock, &thisObject->_packetQueue);
 			CLIENT_MANAGER->PushClient(sock, session);
 			session->PostRecv();
 
@@ -115,7 +115,7 @@ unsigned int WINAPI ThreadManager::_RunLogicThreadMain(void* _thisObject)
 		{
 			session = CLIENT_MANAGER->GetSessionInClientMap(packetInfo.sock);
 			if (IsNullPtr(session))
-				return;
+				return 0;
 
 			switch (packetInfo.packetIndex)
 			{
