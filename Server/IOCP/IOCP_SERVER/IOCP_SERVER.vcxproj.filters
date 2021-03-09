@@ -37,6 +37,9 @@
     <Filter Include="Server\Client">
       <UniqueIdentifier>{e4a5223c-a440-4868-968a-e2991f02249a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server\Room">
+      <UniqueIdentifier>{3a314b3a-4c2a-4692-95c2-bfb860a3bc1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="ClientManager.cpp">
       <Filter>Server\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
+      <Filter>Server\Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +105,12 @@
       <Filter>Basic</Filter>
     </ClInclude>
     <ClInclude Include="ClientManager.h">
+      <Filter>Server\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Server\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientState.h">
       <Filter>Server\Client</Filter>
     </ClInclude>
   </ItemGroup>

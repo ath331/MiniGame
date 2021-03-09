@@ -8,7 +8,7 @@ void ClientManager::PushClient(SOCKET sock, TcpSession* session)
 
 	ClientState cs;
 	cs.session = session;
-	_clientMap.insert(make_pair(sock,cs));
+	_clientMap.insert(make_pair(sock, cs));
 }
 
 void ClientManager::PopClient(SOCKET sock)
@@ -27,3 +27,13 @@ TcpSession* ClientManager::GetSessionInClientMap(SOCKET sock)
 
 	return _clientMap[sock].session;
 }
+
+ClientState& ClientManager::GetClientStateInClientMap(SOCKET sock)
+{
+	/*auto pair = _clientMap.find(sock);
+	if (pair == _clientMap.end())
+		return nullptr;*/
+
+	return _clientMap[sock];
+}
+

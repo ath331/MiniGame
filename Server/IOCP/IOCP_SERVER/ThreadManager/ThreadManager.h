@@ -10,10 +10,11 @@ using namespace std;
 
 class Acceptor;
 class ClientManager;
+class RoomManager;
 class ThreadManager
 {
 public:
-	void InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* accept, ClientManager* clientManager);
+	void InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* accept, ClientManager* clientManager, RoomManager* roomManager);
 	void MakeThread();
 	void WaitThread();
 private:
@@ -32,5 +33,6 @@ private:
 
 	Acceptor* _acceptor;
 	ClientManager* _clientManager;
+	RoomManager* _roomManager;
 };
 

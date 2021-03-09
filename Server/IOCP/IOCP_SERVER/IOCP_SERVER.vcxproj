@@ -151,6 +151,7 @@
     <ClCompile Include="Basic\Macro.cpp" />
     <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="Server\Acceptor\Acceptor.cpp" />
     <ClCompile Include="Server\Server.cpp" />
     <ClCompile Include="Server\Session\TcpSession.cpp" />
@@ -165,6 +166,8 @@
     <ClInclude Include="Basic\Macro.h" />
     <ClInclude Include="Basic\OverlappedCustom.h" />
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="ClientState.h" />
+    <ClInclude Include="RoomManager.h" />
     <ClInclude Include="Server\Acceptor\Acceptor.h" />
     <ClInclude Include="Server\Server.h" />
     <ClInclude Include="Server\Session\TcpSession.h" />

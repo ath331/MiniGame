@@ -2,12 +2,12 @@
 #include "ThreadManagerCppHeader.h"
 #include "OverlappedCustom.h"
 #include "Basic.h"
-#include "../ClientManager.h"
+#include "../BaseHeader.h"
 
 #include <process.h>
 #include <algorithm>
 
-void ThreadManager::InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* acceptor, ClientManager* clientManager)
+void ThreadManager::InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* acceptor, ClientManager* clientManager, RoomManager* roomManager)
 {
 	_maxThreadNum = maxThreadNum;
 	_comPort = comPort;
@@ -16,6 +16,8 @@ void ThreadManager::InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor
 		_acceptor = acceptor;
 	if (!IsNullPtr(clientManager))
 		_clientManager = clientManager;
+	if (!IsNullPtr(roomManager))
+		_roomManager = roomManager;
 }
 
 void ThreadManager::MakeThread()
@@ -124,6 +126,15 @@ unsigned int WINAPI ThreadManager::_RunLogicThreadMain(void* _thisObject)
 				PacketEcho packetEcho;
 				memcpy(&packetEcho, packetInfo.packetBuffer, sizeof(PacketEcho));
 				session->PushSendVec(packetInfo, sizeof(PacketEcho));
+			}
+			break;
+
+			case PacketIndex::CS_EnterRoom:
+			{
+				SC_PacketEnterRoom scPacketEnterRoom;
+
+				ROOM_MANAGER->EnterRoom(CLIENT_MANAGER->GetClientStateInClientMap(packetInfo.sock));
+
 			}
 			break;
 
