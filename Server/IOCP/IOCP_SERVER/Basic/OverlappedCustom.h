@@ -14,8 +14,12 @@ struct Overlapped
 
 	OVERLAPPED overlapped;
 	IO_TYPE ioType;
-	SOCKET sock;
-	Overlapped() {}
+	SOCKET sock = 0;
+	Overlapped() 
+	{
+		Init();
+	}
+
 	Overlapped(IO_TYPE _ioType) : ioType(_ioType)
 	{
 		Init();

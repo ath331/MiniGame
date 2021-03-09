@@ -48,7 +48,7 @@ void ThreadManager::WaitThread()
 unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 {
 	if (IsNullPtr(_thisObject))
-		return -1;
+		return 0;
 
 	ThreadManager* thisObject = (ThreadManager*)_thisObject;
 	DWORD bytesTrans = 0;
@@ -58,10 +58,10 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 	while (1)
 	{
 		GetQueuedCompletionStatus(thisObject->_comPort, &bytesTrans, (PULONG_PTR)&sock, (LPOVERLAPPED*)&ioInfo, INFINITE);
+		sock = ioInfo->sock; //立加茄 clientSock
 
 		if (ioInfo->ioType == Overlapped::IO_TYPE::ACCEPT) //Client 立加
 		{
-			SOCKET sock = ioInfo->sock; //立加茄 clientSock
 			TcpSession* session = new TcpSession(thisObject->_comPort, sock, &thisObject->_packetQueue);
 			CLIENT_MANAGER->PushClient(sock, session);
 			session->PostRecv();
@@ -93,7 +93,7 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 unsigned int WINAPI ThreadManager::_RunLogicThreadMain(void* _thisObject)
 {
 	if (IsNullPtr(_thisObject))
-		return -1;
+		return 0;
 
 	ThreadManager* thisObject = static_cast<ThreadManager*>(_thisObject);
 	PacketInfo packetInfo;

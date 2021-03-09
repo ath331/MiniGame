@@ -32,7 +32,7 @@ Server::Server()
 	memset(&_servAdr, 0, sizeof(_servAdr));
 	_servAdr.sin_family = AF_INET;
 	_servAdr.sin_addr.s_addr = htonl(INADDR_ANY);
-	_servAdr.sin_port = htons(_portNum);
+	_servAdr.sin_port = htons((u_short)_portNum);
 
 	_PrintServerInfo();
 
