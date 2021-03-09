@@ -4,7 +4,6 @@
 class Acceptor
 {
 public:
-	Acceptor() {};
 	Acceptor(SOCKET servSock) :_servSock(servSock) 
 	{
 		_overlapped.ioType = Overlapped::IO_TYPE::ACCEPT;
@@ -17,7 +16,7 @@ private:
 	SOCKET _clientSock;
 
 	Overlapped _overlapped;
-	char _buff[1024];
-	DWORD _recvLen;
+	char _buff[1024]{0,};
+	DWORD _recvLen = 0;
 };
 

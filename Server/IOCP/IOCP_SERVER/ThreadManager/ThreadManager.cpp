@@ -2,20 +2,20 @@
 #include "ThreadManagerCppHeader.h"
 #include "OverlappedCustom.h"
 #include "Basic.h"
+#include "../ClientManager.h"
 
 #include <process.h>
 #include <algorithm>
 
-void ThreadManager::InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* acceptor, RoomManager* roomManager)
+void ThreadManager::InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* acceptor, ClientManager* clientManager)
 {
 	_maxThreadNum = maxThreadNum;
 	_comPort = comPort;
 
 	if (!IsNullPtr(acceptor))
 		_acceptor = acceptor;
-
-	if (!IsNullPtr(roomManager))
-		_roomManager = roomManager;
+	if (!IsNullPtr(clientManager))
+		_clientManager = clientManager;
 }
 
 void ThreadManager::MakeThread()
@@ -59,10 +59,11 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 	{
 		GetQueuedCompletionStatus(thisObject->_comPort, &bytesTrans, (PULONG_PTR)&sock, (LPOVERLAPPED*)&ioInfo, INFINITE);
 
-		if (ioInfo->ioType == Overlapped::IO_TYPE::ACCEPT)
+		if (ioInfo->ioType == Overlapped::IO_TYPE::ACCEPT) //Client 접속
 		{
 			SOCKET sock = ioInfo->sock; //접속한 clientSock
 			TcpSession* session = new TcpSession(thisObject->_comPort, sock, &thisObject->_packetQueue);
+			CLIENT_MANAGER->PushClient(sock, session);
 			session->PostRecv();
 
 			thisObject->_acceptor->AcceptClient();
@@ -70,19 +71,19 @@ unsigned int WINAPI ThreadManager::_RunIOThreadMain(void* _thisObject)
 			Log log(LogIndex::LOG, "Client Accept");
 		}
 
-		else if (ioInfo->ioType == Overlapped::IO_TYPE::RECV)
+		else if (ioInfo->ioType == Overlapped::IO_TYPE::RECV) //Client의 데이터 Recv
 		{
 			if (bytesTrans == 0)
 			{
-				Log log(LogIndex::LOG, "Client Close");
+				CLIENT_MANAGER->PopClient(sock);
 				continue;
 			}
-			thisObject->_clientManager->GetClientSession(sock)->OnRecvForIocp(bytesTrans);
+			CLIENT_MANAGER->GetSession(sock)->OnRecvForIocp(bytesTrans);
 		}
 
-		else if (ioInfo->ioType == Overlapped::IO_TYPE::SEND)
+		else if (ioInfo->ioType == Overlapped::IO_TYPE::SEND) //Client에게 데이터 Send
 		{
-			thisObject->_clientManager->GetClientSession(sock)->OnSendForIocp();
+			CLIENT_MANAGER->GetSession(sock)->OnSendForIocp();
 		}
 
 	}
@@ -102,13 +103,13 @@ unsigned int WINAPI ThreadManager::_RunLogicThreadMain(void* _thisObject)
 		Sleep(1);
 		if (thisObject->_packetQueue.try_pop(packetInfo))
 		{
-			clientSession = thisObject->_clientManager->GetClientSession(packetInfo.sock);
+			clientSession = CLIENT_MANAGER->GetSession(packetInfo.sock);
 			switch (packetInfo.packetIndex)
 			{
 			case PacketIndex::ECHO:
 			{
 				PacketEcho packetEcho;
-				memcpy(&packetEcho, packetInfo.packetBuffer,sizeof(PacketEcho));
+				memcpy(&packetEcho, packetInfo.packetBuffer, sizeof(PacketEcho));
 				clientSession->PushSendVec(packetInfo, sizeof(PacketEcho));
 			}
 			break;

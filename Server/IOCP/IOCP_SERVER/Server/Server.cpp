@@ -47,14 +47,21 @@ Server::Server()
 
 	CreateIoCompletionPort((HANDLE)_servSock, _comPort, NULL, 0);
 	_acceptor = new Acceptor(_servSock);
-	_threadManager->InitThreadManager(_sysInfo.dwNumberOfProcessors * 2, _comPort, _acceptor, _roomManager);
+
+	if (IsNullPtr(_acceptor))
+		_acceptor = new Acceptor(_servSock);
+	if (IsNullPtr(_threadManager))
+		_threadManager = new ThreadManager;
+	if (IsNullPtr(_clientManager))
+		_clientManager = new ClientManager;
+
+	_threadManager->InitThreadManager(_sysInfo.dwNumberOfProcessors * 2, _comPort, _acceptor, _clientManager);
 }
 
 void Server::_InitManagers()
 {
 	_threadManager = new ThreadManager;
 	_clientManager = new ClientManager;
-	_roomManager = new RoomManager;
 }
 
 

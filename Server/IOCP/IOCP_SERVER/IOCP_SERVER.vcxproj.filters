@@ -34,6 +34,9 @@
     <Filter Include="Basic\Log">
       <UniqueIdentifier>{8e852c32-4306-4750-970c-b970a0c196da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server\Client">
+      <UniqueIdentifier>{e4a5223c-a440-4868-968a-e2991f02249a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Basic\Macro.cpp">
       <Filter>Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientManager.cpp">
+      <Filter>Server\Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Basic\Macro.h">
       <Filter>Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientManager.h">
+      <Filter>Server\Client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

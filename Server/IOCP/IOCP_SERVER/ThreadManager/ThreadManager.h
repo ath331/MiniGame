@@ -9,11 +9,11 @@
 using namespace std;
 
 class Acceptor;
-class RoomManager;
+class ClientManager;
 class ThreadManager
 {
 public:
-	void InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* accept, RoomManager* roomManager);
+	void InitThreadManager(int maxThreadNum, HANDLE comPort, Acceptor* accept, ClientManager* clientManager);
 	void MakeThread();
 	void WaitThread();
 private:
@@ -31,6 +31,6 @@ private:
 	concurrency::concurrent_queue<PacketInfo> _packetQueue;
 
 	Acceptor* _acceptor;
-	RoomManager* _roomManager;
+	ClientManager* _clientManager;
 };
 

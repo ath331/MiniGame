@@ -5,7 +5,6 @@
 class ClientManager;
 class ThreadManager;
 class Acceptor;
-class RoomManager;
 class Server
 {
 public:
@@ -24,7 +23,6 @@ private:
 
 	ClientManager* _clientManager;
 	ThreadManager* _threadManager;
-	RoomManager* _roomManager;
 
 	Acceptor* _acceptor;
 
